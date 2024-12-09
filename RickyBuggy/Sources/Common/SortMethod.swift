@@ -13,9 +13,9 @@ extension SortMethod: CustomStringConvertible {
     var description: String {
         switch self {
         case .name:
-            return "Name"
+                return Constants.SortTypes.name
         case .episodesCount:
-            return "Episodes Count"
+                return Constants.SortTypes.episodeCount
         }
     }
 }
@@ -26,7 +26,7 @@ extension SortMethod {
             case .name:
                 return { $0.name < $1.name }
             case .episodesCount:
-                return { $0.episode.count > $1.episode.count }
+                return { $0.episode.count < $1.episode.count }
         }
     }
 }

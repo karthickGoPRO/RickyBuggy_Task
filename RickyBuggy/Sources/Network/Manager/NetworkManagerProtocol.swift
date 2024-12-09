@@ -16,10 +16,10 @@ protocol NetworkManagerProtocol {
 extension NetworkManagerProtocol {
     func publisher(
         path: String,
-        httpMethod: String = "GET",
+        httpMethod: String = Constants.NetworkConstants.defaultMethod,
         httpBody: Data? = nil,
-        timeoutInterval: TimeInterval = 5
+        timeoutInterval: TimeInterval = Constants.NetworkConstants.defaultTimeout
     ) -> Publishers.MapKeyPath<Publishers.MapError<URLSession.DataTaskPublisher, Error>, Data> {
-        return publisher(path: path, httpMethod: httpMethod, httpBody: httpBody, timeoutInterval: 5)
+        return publisher(path: path, httpMethod: httpMethod, httpBody: httpBody, timeoutInterval: timeoutInterval)
     }
 }

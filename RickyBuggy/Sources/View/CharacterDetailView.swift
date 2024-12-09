@@ -79,7 +79,7 @@ private extension CharacterDetailView {
         VStack(alignment: .center, spacing: 8) {
            
             HStack {
-                Text("Popularity level:")
+                Text(Constants.UiConstants.popularityTitle)
                     .font(.headline)
                 Text(viewModel.popularityName)
                     .font(.headline)
@@ -87,7 +87,7 @@ private extension CharacterDetailView {
             
             Spacer()
             
-            Text("About")
+            Text(Constants.UiConstants.about)
                 .font(.headline)
             
             Text(viewModel.details)
@@ -105,7 +105,7 @@ private extension CharacterDetailView {
     var locationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text("Location")
+                Text(Constants.UiConstants.location)
                     .font(.headline)
                 
                 Spacer()

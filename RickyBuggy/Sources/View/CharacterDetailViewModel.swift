@@ -54,7 +54,8 @@ final class CharacterDetailViewModel: ObservableObject {
                     self.characterErrors.append(.characterDetailRequestFailed(underlyingError: error))
                 }
             }, receiveValue: { [weak self] characterDetail, location in
-                self?.data = (characterDetail, location)
+                guard let self = self else { return }
+                self.data = (characterDetail, location)
             })
             .store(in: &cancellables)
 

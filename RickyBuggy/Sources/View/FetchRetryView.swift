@@ -17,7 +17,7 @@ struct FetchRetryView: View {
     var body: some View {
         VStack(spacing: 32) {
             VStack(spacing: 8) {
-                Text("Request Error")
+                Text(Constants.UiConstants.retryErrorTitle)
                     .font(.title3)
                     .fontWeight(.bold)
                     .lineLimit(1)
@@ -32,7 +32,7 @@ struct FetchRetryView: View {
             }
             
             Button(action: onRetry) {
-                Text("Retry")
+                Text(Constants.UiConstants.retryTitle)
                     .font(.title3)
                     .fontWeight(.semibold)
             }

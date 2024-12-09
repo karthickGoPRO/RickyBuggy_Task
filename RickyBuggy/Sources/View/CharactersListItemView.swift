@@ -52,6 +52,10 @@ struct CharactersListItemView: View {
                         .contentsStyle()
                     
                     Spacer()
+                    
+                    Text("\(Constants.UiConstants.episodeCountTitle) \(viewModel.countEPISODE)")
+                        .contentsStyle()
+                    Spacer()
                 }
             }
         }

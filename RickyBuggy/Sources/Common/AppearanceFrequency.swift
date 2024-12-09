@@ -18,11 +18,11 @@ enum AppearanceFrequency: Int {
 extension AppearanceFrequency {
     init(count: Int) {
         switch count {
-            case 10...: // If count is 10 or more
+            case 10...:
                 self = .high
-            case 3..<10: // If count is between 3 and 9 (inclusive)
+            case 3..<10:
                 self = .medium
-            default: // If count is less than 3
+            default:
                 self = .low
         }
     }
@@ -30,11 +30,11 @@ extension AppearanceFrequency {
     var popularity: String {
         switch self {
             case .high:
-                return "So popular!"
+                return Constants.UiConstants.popularityIndexHigh
             case .medium:
-                return "Kind of popular"
+                return Constants.UiConstants.popularityIndexMedium
             case .low:
-                return "Meh"
+                return Constants.UiConstants.popularityIndexLow
         }
     }
 }

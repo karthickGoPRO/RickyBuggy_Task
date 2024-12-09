@@ -12,9 +12,9 @@ struct AppMainView: View {
     var body: some View {
         NavigationView {
             characterListView
-                .navigationTitle(Text("Characters"))
+                .navigationTitle(Text(Constants.UiConstants.homepageTitle))
                 .navigationBarTitleDisplayMode(.automatic)
-                // FIX : 7 - Fix issue with glitching toolbar on entering details view -- DONE
+            // FIX : 7 - Fix issue with glitching toolbar on entering details view -- DONE
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         sortButton
@@ -42,26 +42,26 @@ private extension AppMainView {
                 .progressViewStyle(CircularProgressViewStyle())
         }
     }
-
+    
     var sortButton: some View {
         Button(action: viewModel.setShowsSortActionSheet) {
-            Text("Choose Sorting")
+            Text(Constants.UiConstants.sortingChoosingTitle)
         }
     }
     
     // FIX: 8 - Fix action sheet only appearing once, in other words - after it gets opened and closed, it cannot be opened again - DONE
     var sortActionSheet: ActionSheet {
         ActionSheet(
-            title: Text("Sort method"),
-            message: Text("Choose sorting method"),
+            title: Text(Constants.UiConstants.sortTitle),
+            message: Text(Constants.UiConstants.sortDescTitle),
             buttons: [
-                .default(Text("Episodes Count")) {
+                .default(Text(Constants.SortTypes.episodeCount)) {
                     viewModel.setSortMethod(.episodesCount)
                 },
-                .default(Text("Name")) {
+                .default(Text(Constants.SortTypes.name)) {
                     viewModel.setSortMethod(.name)
                 },
-                .cancel(Text("Cancel")),
+                .cancel(Text(Constants.UiConstants.cancelTitle)),
             ]
         )
     }

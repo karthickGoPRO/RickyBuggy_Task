@@ -33,7 +33,7 @@ final class APIClient: APIProtocol {
         return Just(Constants.URLBuilder(type: .characters, value: "/\(Array(1...20))"))
             .setFailureType(to: Error.self)
             .flatMap { path in
-                networkManager.publisher(path: path, httpMethod: "GET")
+                networkManager.publisher(path: path)
             }
             .decode(type: [CharacterResponseModel].self, decoder: JSONDecoder())
             .mapError { error in
@@ -49,7 +49,7 @@ final class APIClient: APIProtocol {
         return Just(Constants.URLBuilder(type: .characters, value: "/\(id)"))
             .setFailureType(to: Error.self)
             .flatMap { path in
-                networkManager.publisher(path: path, httpMethod: "GET")
+                networkManager.publisher(path: path)
             }
             .decode(type: CharacterResponseModel.self, decoder: JSONDecoder())
             .mapError { error in
@@ -65,7 +65,7 @@ final class APIClient: APIProtocol {
         return Just(Constants.URLBuilder(type: .locations, value: "/\(id)"))
             .setFailureType(to: Error.self)
             .flatMap { path in
-                networkManager.publisher(path: path, httpMethod: "GET")
+                networkManager.publisher(path: path)
             }
             .decode(type: LocationDetailsResponseModel.self, decoder: JSONDecoder())
             .mapError { error in

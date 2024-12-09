@@ -12,7 +12,7 @@ final class AppMainViewModel: ObservableObject {
     @Published var characters: [CharacterResponseModel] = []
 
     @Published private(set) var characterErrors: [APIError] = []
-    @Published private(set) var sortMethodDescription: String = "Choose Sorting"
+    @Published private(set) var sortMethodDescription: String = Constants.UiConstants.sortingOptionTitle
 
     private let showsSortActionSheetSubject = CurrentValueSubject<Bool?, Never>(nil)
     private let sortMethodSubject = CurrentValueSubject<SortMethod?, Never>(nil)
@@ -54,16 +54,18 @@ final class AppMainViewModel: ObservableObject {
         apiService?.charactersPublisher()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
                 switch completion {
                 case let .failure(error):
-                    self?.characterErrors.append(error)
+                    self.characterErrors.append(error)
                 case .finished:
                     break
                 }
                 
-                self?.isLoading = false
+                self.isLoading = false
             }, receiveValue: { [weak self] characters in
-                self?.characters = characters
+                guard let self = self else { return }
+                self.characters = characters
             })
             .store(in: &cancellables)
     }

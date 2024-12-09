@@ -8,22 +8,20 @@ import Combine
 
 final class NetworkManager: NetworkManagerProtocol {
     
-    static let RANDOM_HOST_NAME_TO_FAIL_REQUEST = "thisshouldfail.com"
-    
     /// FIX: 2 - Refactor - add support for different properties eg. POST, httpBody, different timeouts etc. -- DONE
     func publisher(path: String,
                    httpMethod: String,
                    httpBody: Data?,
                    timeoutInterval timeout: TimeInterval) -> Publishers.MapKeyPath<Publishers.MapError<URLSession.DataTaskPublisher, Error>, Data> {
         var components = URLComponents()
-        components.scheme = "https"
-        components.host = Int.random(in: 1...10) > 3 ? "rickandmortyapi.com" : NetworkManager.RANDOM_HOST_NAME_TO_FAIL_REQUEST
+        components.scheme = Constants.NetworkConstants.scheme
+        components.host = Int.random(in: 1...10) > 3 ? Constants.NetworkConstants.baseURL : Constants.NetworkConstants.failCaseURL
         components.path = path
         
         /// FIX: 3 - Add "guard let url = components.url else..." -- DONE
         /// Have not changed the return type in protocol so added dummy empty value for else
         guard let url = components.url else {
-            return URLSession.shared.dataTaskPublisher(for: URLRequest(url: URL(string: "https://example.com")!))
+            return URLSession.shared.dataTaskPublisher(for: URLRequest(url: URL(string: Constants.NetworkConstants.failCaseURL)!))
                 .mapError { _ in APIError.imageDataRequestFailed(underlyingError: URLError(.badURL)) }
                 .map(\.data)
         }
