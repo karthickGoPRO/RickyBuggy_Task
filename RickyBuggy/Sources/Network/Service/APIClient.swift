@@ -18,21 +18,27 @@ final class APIClient: APIProtocol {
         
         return Just(urlString)
             .setFailureType(to: Error.self)
-            .flatMap(networkManager.publisher(fromURLString:))
-            .mapError { _ in APIError.imageDataRequestFailed }
+            .flatMap { path in
+                networkManager.publisher(fromURLString: path)
+            }
+            .mapError { error in
+                APIError.imageDataRequestFailed(underlyingError: error)
+            }
             .eraseToAnyPublisher()
     }
     
     func charactersPublisher() -> CharactersPublisher {
         guard let networkManager = networkManager else { return Empty().eraseToAnyPublisher() }
 
-        return Just("/api/character/[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]")
+        return Just(Constants.URLBuilder(type: .characters, value: "/\(Array(1...20))"))
             .setFailureType(to: Error.self)
-            .flatMap(networkManager.publisher(path:))
+            .flatMap { path in
+                networkManager.publisher(path: path, httpMethod: "GET")
+            }
             .decode(type: [CharacterResponseModel].self, decoder: JSONDecoder())
             .mapError { error in
                 debugPrint(error)
-                return APIError.charactersRequestFailed
+                return APIError.charactersRequestFailed(underlyingError: error)
             }
             .eraseToAnyPublisher()
     }
@@ -40,13 +46,15 @@ final class APIClient: APIProtocol {
     func characterDetailPublisher(with id: String) -> CharacterDetailsPublisher {
         guard let networkManager = networkManager else { return Empty().eraseToAnyPublisher() }
 
-        return Just("/api/character/\(id)")
+        return Just(Constants.URLBuilder(type: .characters, value: "/\(id)"))
             .setFailureType(to: Error.self)
-            .flatMap(networkManager.publisher(path:))
+            .flatMap { path in
+                networkManager.publisher(path: path, httpMethod: "GET")
+            }
             .decode(type: CharacterResponseModel.self, decoder: JSONDecoder())
             .mapError { error in
                 debugPrint(error)
-                return APIError.characterDetailRequestFailed
+                return APIError.characterDetailRequestFailed(underlyingError: error)
             }
             .eraseToAnyPublisher()
     }
@@ -54,13 +62,15 @@ final class APIClient: APIProtocol {
     func locationPublisher(with id: String) -> LocationPublisher {
         guard let networkManager = networkManager else { return Empty().eraseToAnyPublisher() }
 
-        return Just("/api/location/\(id)")
+        return Just(Constants.URLBuilder(type: .locations, value: "/\(id)"))
             .setFailureType(to: Error.self)
-            .flatMap(networkManager.publisher(path:))
+            .flatMap { path in
+                networkManager.publisher(path: path, httpMethod: "GET")
+            }
             .decode(type: LocationDetailsResponseModel.self, decoder: JSONDecoder())
             .mapError { error in
                 debugPrint(error)
-                return APIError.locationRequestFailed
+                return APIError.locationRequestFailed(underlyingError: error)
             }
             .eraseToAnyPublisher()
     }

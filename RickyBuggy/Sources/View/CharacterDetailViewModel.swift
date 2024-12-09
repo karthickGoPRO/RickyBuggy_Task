@@ -48,7 +48,10 @@ final class CharacterDetailViewModel: ObservableObject {
 
         dataPublisher
             .sink(receiveCompletion: { [weak self] completion in
-                self?.characterErrors.append(.characterDetailRequestFailed)
+                guard let self = self else { return }
+                if case let .failure(error) = completion {
+                    self.characterErrors.append(.characterDetailRequestFailed(underlyingError: error))
+                }
             }, receiveValue: { [weak self] characterDetail, location in
                 self?.data = (characterDetail, location)
             })

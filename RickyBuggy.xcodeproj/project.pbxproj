@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		28C5A5B62D0716E5008A5C85 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2308FA282A41B1003EC7DC /* DIContainer.swift */; };
 		28C5A5B72D07177E008A5C85 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2308FF282A41B1003EC7DC /* CharactersListView.swift */; };
+		28C5A5B92D072314008A5C85 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C5A5B82D072314008A5C85 /* Constants.swift */; };
 		2C2308BF282A3FD8003EC7DC /* RickyBuggyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2308BE282A3FD8003EC7DC /* RickyBuggyApp.swift */; };
 		2C2308C3282A3FD9003EC7DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2308C2282A3FD9003EC7DC /* Assets.xcassets */; };
 		2C2308C6282A3FD9003EC7DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2308C5282A3FD9003EC7DC /* Preview Assets.xcassets */; };
@@ -45,6 +46,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		28C5A5B82D072314008A5C85 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		28C5A5BA2D072A3E008A5C85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2C2308BB282A3FD8003EC7DC /* RickyBuggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickyBuggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C2308BE282A3FD8003EC7DC /* RickyBuggyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RickyBuggyApp.swift; sourceTree = "<group>"; };
 		2C2308C2282A3FD9003EC7DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -113,6 +116,7 @@
 		2C2308BD282A3FD8003EC7DC /* RickyBuggy */ = {
 			isa = PBXGroup;
 			children = (
+				28C5A5BA2D072A3E008A5C85 /* Info.plist */,
 				2C2308EE282A41B1003EC7DC /* Sources */,
 				2C2308BE282A3FD8003EC7DC /* RickyBuggyApp.swift */,
 				2C2308C2282A3FD9003EC7DC /* Assets.xcassets */,
@@ -183,6 +187,7 @@
 				2C2308F8282A41B1003EC7DC /* AppearanceFrequency.swift */,
 				2C2308F9282A41B1003EC7DC /* SortMethod.swift */,
 				2C2308FA282A41B1003EC7DC /* DIContainer.swift */,
+				28C5A5B82D072314008A5C85 /* Constants.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -352,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C23091E282A41B1003EC7DC /* CharacterDetailViewModel.swift in Sources */,
+				28C5A5B92D072314008A5C85 /* Constants.swift in Sources */,
 				2C230914282A41B1003EC7DC /* CharactersResponseModel.swift in Sources */,
 				2C23090F282A41B1003EC7DC /* APIServiceProtocol.swift in Sources */,
 				2C23091C282A41B1003EC7DC /* CharacterDetailView.swift in Sources */,
@@ -523,6 +529,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickyBuggy/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -554,6 +561,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RickyBuggy/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
