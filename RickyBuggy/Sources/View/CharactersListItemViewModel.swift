@@ -11,6 +11,7 @@ final class CharactersListItemViewModel: ObservableObject {
     @Published private(set) var characterErrors: [APIError] = []
 
     @Published private(set) var title: String = "-"
+    @Published private(set) var id : Int = 0
     @Published private(set) var characterImageData: Data?
     @Published private(set) var created: String = "-"
     @Published private(set) var url: String = "-"
@@ -28,6 +29,11 @@ final class CharactersListItemViewModel: ObservableObject {
         characterSharedPublisher
             .map(\.name)
             .assign(to: \.title, on: self)
+            .store(in: &cancellables)
+        
+        characterSharedPublisher
+            .map(\.id)
+            .assign(to: \.id, on: self)
             .store(in: &cancellables)
         
         characterSharedPublisher

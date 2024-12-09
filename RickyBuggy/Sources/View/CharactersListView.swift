@@ -17,13 +17,9 @@ struct CharactersListView: View {
     var body: some View {
         List(characters) { character in
             let destinationViewModel = CharacterDetailViewModel(characterId: character.id, name: character.name)
-            let destination = CharacterDetailView(viewModel: destinationViewModel)
 
-            NavigationLink(destination: destination) {
                 let viewModel = CharactersListItemViewModel(character: character)
-
-                CharactersListItemView(viewModel: viewModel)
-            }
+            CharactersListItemView(viewModel: viewModel)
         }
     }
 }
