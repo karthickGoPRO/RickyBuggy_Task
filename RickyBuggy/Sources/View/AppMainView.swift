@@ -14,7 +14,7 @@ struct AppMainView: View {
             characterListView
                 .navigationTitle(Text("Characters"))
                 .navigationBarTitleDisplayMode(.automatic)
-                // FIX : 7 - Fix issue with glitching toolbar on entering details view -- Issue Not Happening
+                // FIX : 7 - Fix issue with glitching toolbar on entering details view -- DONE
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         sortButton
