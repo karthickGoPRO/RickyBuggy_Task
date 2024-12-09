@@ -47,6 +47,7 @@ final class CharacterDetailViewModel: ObservableObject {
             .map(\.characterDetails)
 
         dataPublisher
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
                 if case let .failure(error) = completion {
@@ -109,24 +110,28 @@ final class CharacterDetailViewModel: ObservableObject {
         data = nil
         characterErrors.removeAll()
         isLoading = true
-
-        if let apiService = DIContainer.shared.resolve(APIClient.self), let characterID = characterIDSubject.value {
-            Publishers.Zip(apiService.characterDetailPublisher(with: String(characterID)),
-                           // FIXME: 11 - FIX so location is fetched based on character location id
-                           apiService.locationPublisher(with: "2"))
-                .sink(receiveCompletion: { [weak self] completion in
-                    switch completion {
+        
+        if let apiService = DIContainer.shared.resolve(APIClient.self),
+           let characterID = characterIDSubject.value {
+            Publishers.Zip(
+                apiService.characterDetailPublisher(with: String(characterID)),
+                apiService.locationPublisher(with: "\(characterID)")
+            )
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                switch completion {
                     case let .failure(error):
-                        self?.characterErrors.append(error)
+                        self.characterErrors.append(error)
                     case .finished:
                         break
-                    }
-
-                    self?.isLoading = false
-                }, receiveValue: { [weak self] characterDetail, comments in
-                    self?.dataSubject.send((characterDetail, comments))
-                })
-                .store(in: &cancellables)
+                }
+                self.isLoading = false
+            }, receiveValue: { [weak self] characterDetail, comments in
+                guard let self = self else { return }
+                self.dataSubject.send((characterDetail, comments))
+            })
+            .store(in: &cancellables)
         }
     }
 }

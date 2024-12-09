@@ -109,11 +109,11 @@ private extension CharacterDetailView {
                     .font(.headline)
                 
                 Spacer()
-                
+                // FIX : 12 - change to filled share icon using sfsymbols, confirm if functionallity works, fix if needed - DONE
                 Button(action: viewModel.setShowsLocationDetails) {
-                    // FIXME: 12 - change to filled share icon using sfsymbols, confirm if functionallity works, fix if needed
-                    Image(systemName: "globe")
+                    Image(systemName: "arrow.up.right.circle.fill")
                         .accentColor(.orange)
+                        .font(.title)
                 }
             }
         }
@@ -129,7 +129,6 @@ private extension CharacterDetailView {
                     
                     Text(locationDetail.created)
                         .font(.headline)
-                    
                     
                     Divider()
                         .padding(.horizontal, 16)
