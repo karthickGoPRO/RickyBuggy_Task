@@ -10,7 +10,7 @@ final class NetworkManager: NetworkManagerProtocol {
     
     static let RANDOM_HOST_NAME_TO_FAIL_REQUEST = "thisshouldfail.com"
     
-    /// FIXME: 2 - Refactor - add support for different properties eg. POST, httpBody, different timeouts etc. -- DONE
+    /// FIX: 2 - Refactor - add support for different properties eg. POST, httpBody, different timeouts etc. -- DONE
     func publisher(path: String,
                    httpMethod: String,
                    httpBody: Data?,
@@ -20,7 +20,7 @@ final class NetworkManager: NetworkManagerProtocol {
         components.host = Int.random(in: 1...10) > 3 ? "rickandmortyapi.com" : NetworkManager.RANDOM_HOST_NAME_TO_FAIL_REQUEST
         components.path = path
         
-        /// FIXME: 3 - Add "guard let url = components.url else..." -- DONE
+        /// FIX: 3 - Add "guard let url = components.url else..." -- DONE
         /// Have not changed the return type in protocol so added dummy empty value for else
         guard let url = components.url else {
             return URLSession.shared.dataTaskPublisher(for: URLRequest(url: URL(string: "https://example.com")!))

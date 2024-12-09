@@ -10,7 +10,7 @@ struct IdentifiableAPIError: Identifiable {
     let error: APIError
 }
 
-/// FIXME: 1 - Refactor so it accepts and displays underlaying error - DONE
+/// FIX: 1 - Refactor so it accepts and displays underlaying error - DONE
 enum APIError: Error {
     case imageDataRequestFailed(underlyingError: Error?)
     case charactersRequestFailed(underlyingError: Error?)
