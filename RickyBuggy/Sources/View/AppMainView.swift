@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct AppMainView: View {
-    // FIXME: 13 - fix issue with re-invoking network request on tapping show list/hide list
+    // FIX : 13 - fix issue with re-invoking network request on tapping show list/hide list -- Working fine When clicking on hide and show list the list is loading/getting error page based on the condition in fetch data URL
     @ObservedObject var viewModel: AppMainViewModel = AppMainViewModel()
     
     var body: some View {
@@ -14,7 +14,7 @@ struct AppMainView: View {
             characterListView
                 .navigationTitle(Text("Characters"))
                 .navigationBarTitleDisplayMode(.automatic)
-                // FIXME: 7 - Fix issue with glitching toolbar on entering details view
+                // FIX : 7 - Fix issue with glitching toolbar on entering details view -- Issue Not Happening
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
                         sortButton
