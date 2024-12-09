@@ -21,15 +21,7 @@ final class AppMainViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        sortMethodSubject
-            .compactMap { $0 }
-            .removeDuplicates()
-            .sink(receiveValue: { [weak self] sortMethod in
-                self?.sortMethod = sortMethod
-                self?.sortMethodDescription = sortMethod.description
-                self?.requestData()
-            })
-            .store(in: &cancellables)
+        bindSortMethod()
         
         showsSortActionSheetSubject
             .compactMap { $0 }
@@ -45,7 +37,7 @@ final class AppMainViewModel: ObservableObject {
     }
     
     func setShowsSortActionSheet() {
-        showsSortActionSheetSubject.send(true)
+        self.showsSortActionSheet.toggle()
     }
     
     func requestData() {
@@ -73,6 +65,18 @@ final class AppMainViewModel: ObservableObject {
             }, receiveValue: { [weak self] characters in
                 self?.characters = characters
             })
+            .store(in: &cancellables)
+    }
+    
+    private func bindSortMethod() {
+        sortMethodSubject
+            .compactMap { $0 }
+            .sink { [weak self] method in
+                guard let self = self else { return }
+                self.sortMethod = method
+                self.sortMethodDescription = method.description
+                self.characters = self.characters.sorted(by: method.sortingClosure)
+            }
             .store(in: &cancellables)
     }
 }
