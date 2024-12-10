@@ -13,6 +13,7 @@ struct RickyBuggyApp: App {
     init() {
         DIContainer.shared.register(NetworkManager())
         DIContainer.shared.register(APIClient())
+        DIContainer.shared.register(DiskCacheManager())
     }
     
     var body: some Scene {

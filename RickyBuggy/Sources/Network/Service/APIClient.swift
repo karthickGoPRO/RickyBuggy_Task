@@ -20,7 +20,23 @@ final class APIClient: APIProtocol {
             .setFailureType(to: Error.self)
             .flatMap { path in
                 networkManager.publisher(fromURLString: path)
-            }
+                    .handleEvents(receiveOutput: { [weak self] receivedData in
+                    guard let _ = self else { return }
+                    do {
+                        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
+                        try discCacheManager?.storeImageData(receivedData, forKey: urlString)
+                    } catch {
+                        print("Failed to store image data: \(error)")
+                    }
+                })
+            }.handleEvents(receiveCompletion: { completion in
+                switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        print("Network request failed with error: \(error)")
+                }
+            })
             .mapError { error in
                 APIError.imageDataRequestFailed(underlyingError: error)
             }

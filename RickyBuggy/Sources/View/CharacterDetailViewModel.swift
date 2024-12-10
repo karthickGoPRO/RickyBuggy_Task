@@ -28,10 +28,11 @@ final class CharacterDetailViewModel: ObservableObject {
     private var isLoading = false
     private var cancellables = Set<AnyCancellable>()
     
-    init(characterId: Int, name: String) {
+    init(characterId: Int, name: String, imageURL : String = "") {
         self.title = name
 
         let apiService = DIContainer.shared.resolve(APIClient.self)
+        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
 
         showsLocationDetailsSubject
             .compactMap { $0 }
@@ -71,6 +72,28 @@ final class CharacterDetailViewModel: ObservableObject {
             .compactMap { $0 }
             .assign(to: \.CharacterPhotoData, on: self)
             .store(in: &cancellables)
+        
+        discCacheManager?.imageDataSyncronizer(
+            forKey: imageURL,
+            cacheAvailable: { cachedData in
+                self.CharacterPhotoData = cachedData
+            },
+            cacheNotAvailableHitAPI: { [weak self] in
+                guard let self else { return }
+                characterDetailsPublisher
+                    .map(\.image)
+                    .flatMap { imageURLString -> ImageDataPublisher in
+                        guard let apiService = apiService else {
+                            return Empty().eraseToAnyPublisher()
+                        }
+                        return apiService.imageDataPublisher(fromURLString: imageURLString)
+                    }
+                    .replaceError(with: Data())
+                    .compactMap { $0 }
+                    .assign(to: \.CharacterPhotoData, on: self)
+                    .store(in: &self.cancellables)
+            }
+        )
 
         characterDetailsPublisher
             .map(\.name)

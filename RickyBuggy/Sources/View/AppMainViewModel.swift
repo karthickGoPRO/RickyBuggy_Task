@@ -8,6 +8,7 @@ import Foundation
 
 final class AppMainViewModel: ObservableObject {
     @Published var showsSortActionSheet: Bool = false
+    @Published var showsAlertForCache: Bool = false
     @Published var sortMethod: SortMethod = .name
     @Published var characters: [CharacterResponseModel] = []
 
@@ -19,10 +20,11 @@ final class AppMainViewModel: ObservableObject {
 
     private var isLoading = false
     private var cancellables = Set<AnyCancellable>()
+    private let diskCacheManager: DiskCacheManager?
     
     init() {
+        diskCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
         bindSortMethod()
-        
         showsSortActionSheetSubject
             .compactMap { $0 }
             .removeDuplicates()
@@ -38,6 +40,11 @@ final class AppMainViewModel: ObservableObject {
     
     func setShowsSortActionSheet() {
         self.showsSortActionSheet.toggle()
+    }
+    
+    func logOutClicked() {
+        self.diskCacheManager?.clearCache()
+        self.showsAlertForCache.toggle()
     }
     
     func requestData() {

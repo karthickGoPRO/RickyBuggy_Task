@@ -17,12 +17,19 @@ struct AppMainView: View {
             // FIX : 7 - Fix issue with glitching toolbar on entering details view -- DONE
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
-                        sortButton
+                        HStack {
+                            sortButton
+                            clearCacheButton
+                        }
                     }
                 }
         }
         .actionSheet(isPresented: $viewModel.showsSortActionSheet) {
             sortActionSheet
+        }.alert(Constants.UiConstants.logOut, isPresented: $viewModel.showsAlertForCache) {
+            Button(Constants.UiConstants.dismiss, role: .cancel) {}
+        } message: {
+            Text(Constants.UiConstants.clearCache)
         }
     }
 }
@@ -46,6 +53,12 @@ private extension AppMainView {
     var sortButton: some View {
         Button(action: viewModel.setShowsSortActionSheet) {
             Text(Constants.UiConstants.sortingChoosingTitle)
+        }
+    }
+    
+    var clearCacheButton: some View {
+        Button(action: viewModel.logOutClicked) {
+            Text(Constants.UiConstants.logOut)
         }
     }
     

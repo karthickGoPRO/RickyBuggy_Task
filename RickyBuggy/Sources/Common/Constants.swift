@@ -47,6 +47,9 @@ struct Constants {
         static let retryErrorTitle = "Retry Error"
         static let retryTitle = "Retry"
         static let episodeCountTitle = "Episodes - "
+        static let logOut = "Clear Cache"
+        static let clearCache = "\n All local cache cleared"
+        static let dismiss = "Dismiss"
     }
     
     struct SortTypes {

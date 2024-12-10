@@ -16,12 +16,14 @@ final class CharactersListItemViewModel: ObservableObject {
     @Published private(set) var characterImageData: Data?
     @Published private(set) var created: String = "-"
     @Published private(set) var url: String = "-"
+    private(set) var imageURL : String = ""
 
     private let characterSubject = CurrentValueSubject<CharacterResponseModel?, Never>(nil)
 
     private var cancellables = Set<AnyCancellable>()
     
     init(character: CharacterResponseModel) {
+        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
         let apiService = DIContainer.shared.resolve(APIClient.self)
         let characterSharedPublisher = characterSubject
             .compactMap { $0 }
@@ -42,18 +44,29 @@ final class CharactersListItemViewModel: ObservableObject {
             .assign(to: \.id, on: self)
             .store(in: &cancellables)
         
-        characterSharedPublisher
-            .map(\.image)
-            .flatMap { imageURLString -> ImageDataPublisher in
-                guard let apiService = apiService else {
-                    return Empty().eraseToAnyPublisher()
-                }
-                return apiService.imageDataPublisher(fromURLString: imageURLString)
+        imageURL = character.image
+        
+        discCacheManager?.imageDataSyncronizer(
+            forKey: character.image,
+            cacheAvailable: { cachedData in
+                self.characterImageData = cachedData
+            },
+            cacheNotAvailableHitAPI: { [weak self] in
+                guard let self else { return }
+                characterSharedPublisher
+                    .map(\.image)
+                    .flatMap { imageURLString -> ImageDataPublisher in
+                        guard let apiService = apiService else {
+                            return Empty().eraseToAnyPublisher()
+                        }
+                        return apiService.imageDataPublisher(fromURLString: imageURLString)
+                    }
+                    .replaceError(with: Data())
+                    .compactMap { $0 }
+                    .assign(to: \.characterImageData, on: self)
+                    .store(in: &self.cancellables)
             }
-            .replaceError(with: Data())
-            .compactMap { $0 }
-            .assign(to: \.characterImageData, on: self)
-            .store(in: &cancellables)
+        )
         
         characterSharedPublisher
             .map(\.created)

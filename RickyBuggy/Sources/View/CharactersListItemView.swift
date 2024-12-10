@@ -15,7 +15,7 @@ struct CharactersListItemView: View {
     var body: some View {
         ZStack {
 
-            NavigationLink(destination: CharacterDetailView(viewModel: CharacterDetailViewModel(characterId: viewModel.id, name: viewModel.title))) {
+            NavigationLink(destination: CharacterDetailView(viewModel: CharacterDetailViewModel(characterId: viewModel.id, name: viewModel.title, imageURL: viewModel.imageURL))) {
                 EmptyView()
             }
             
