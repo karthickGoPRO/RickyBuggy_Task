@@ -90,3 +90,23 @@ Commit 12: Testing Improvements
 	•	Enhanced Test Cases:
 	•	Utilized both XCTest and ViewInspector to improve test coverage and verify the UI and logic more thoroughly.
     •	Increased Code Coverage to 74%
+REFERENCE VIDEOS 
+
+
+https://github.com/user-attachments/assets/b1c314e7-61a2-4262-be75-2110e33bc7ab
+
+
+<img width="544" alt="Screenshot 2024-12-10 at 12 37 28 AM" src="https://github.com/user-attachments/assets/77e4be50-0aa1-44ba-ac65-fb967e63f968">
+
+
+https://github.com/user-attachments/assets/61f57bd9-35fd-4e34-a812-b646b12cae99
+
+
+
+https://github.com/user-attachments/assets/f48832bc-4bdf-43dd-824e-dc1f495b0ef5
+
+
+
+https://github.com/user-attachments/assets/880ca0ac-e4e1-45a2-96d9-68f2f4e94240
+
+
