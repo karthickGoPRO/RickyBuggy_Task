@@ -6,23 +6,30 @@
 import SwiftUI
 
 struct AppMainView: View {
-    // FIXME: 13 - fix issue with re-invoking network request on tapping show list/hide list
+    // FIX : 13 - fix issue with re-invoking network request on tapping show list/hide list -- Working fine When clicking on hide and show list the list is loading/getting error page based on the condition in fetch data URL
     @ObservedObject var viewModel: AppMainViewModel = AppMainViewModel()
     
     var body: some View {
         NavigationView {
             characterListView
-                .navigationTitle(Text("Characters"))
+                .navigationTitle(Text(Constants.UiConstants.homepageTitle))
                 .navigationBarTitleDisplayMode(.automatic)
-                // FIXME: 7 - Fix issue with glitching toolbar on entering details view
+            // FIX : 7 - Fix issue with glitching toolbar on entering details view -- DONE
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
-                        sortButton
+                        HStack {
+                            sortButton
+                            clearCacheButton
+                        }
                     }
                 }
         }
         .actionSheet(isPresented: $viewModel.showsSortActionSheet) {
             sortActionSheet
+        }.alert(Constants.UiConstants.logOut, isPresented: $viewModel.showsAlertForCache) {
+            Button(Constants.UiConstants.dismiss, role: .cancel) {}
+        } message: {
+            Text(Constants.UiConstants.clearCache)
         }
     }
 }
@@ -42,26 +49,32 @@ private extension AppMainView {
                 .progressViewStyle(CircularProgressViewStyle())
         }
     }
-
+    
     var sortButton: some View {
         Button(action: viewModel.setShowsSortActionSheet) {
-            Text("Choose Sorting")
+            Text(Constants.UiConstants.sortingChoosingTitle)
         }
     }
     
-    // FIXME: 8 - Fix action sheet only appearing once, in other words - after it gets opened and closed, it cannot be opened again
+    var clearCacheButton: some View {
+        Button(action: viewModel.logOutClicked) {
+            Text(Constants.UiConstants.logOut)
+        }
+    }
+    
+    // FIX: 8 - Fix action sheet only appearing once, in other words - after it gets opened and closed, it cannot be opened again - DONE
     var sortActionSheet: ActionSheet {
         ActionSheet(
-            title: Text("Sort method"),
-            message: Text("Choose sorting method"),
+            title: Text(Constants.UiConstants.sortTitle),
+            message: Text(Constants.UiConstants.sortDescTitle),
             buttons: [
-                .default(Text("Episodes Count")) {
+                .default(Text(Constants.SortTypes.episodeCount)) {
                     viewModel.setSortMethod(.episodesCount)
                 },
-                .default(Text("Name")) {
+                .default(Text(Constants.SortTypes.name)) {
                     viewModel.setSortMethod(.name)
                 },
-                .cancel(Text("Cancel")),
+                .cancel(Text(Constants.UiConstants.cancelTitle)),
             ]
         )
     }

@@ -11,16 +11,20 @@ final class CharactersListItemViewModel: ObservableObject {
     @Published private(set) var characterErrors: [APIError] = []
 
     @Published private(set) var title: String = "-"
+    @Published private(set) var id : Int = 0
+    @Published private(set) var countEPISODE : Int = 0
     @Published private(set) var characterImageData: Data?
     @Published private(set) var created: String = "-"
     @Published private(set) var url: String = "-"
+    private(set) var imageURL : String = ""
 
     private let characterSubject = CurrentValueSubject<CharacterResponseModel?, Never>(nil)
 
     private var cancellables = Set<AnyCancellable>()
     
     init(character: CharacterResponseModel) {
-        let apiService = DIContainer.shared.resolve(APIClient.self)
+        let discCacheManager = DiskCacheManager()
+        let apiService = SwiftInjectDI.shared.resolve(APIClient.self)
         let characterSharedPublisher = characterSubject
             .compactMap { $0 }
             .share()
@@ -31,17 +35,38 @@ final class CharactersListItemViewModel: ObservableObject {
             .store(in: &cancellables)
         
         characterSharedPublisher
-            .map(\.image)
-            .flatMap { imageURLString -> ImageDataPublisher in
-                guard let apiService = apiService else {
-                    return Empty().eraseToAnyPublisher()
-                }
-                return apiService.imageDataPublisher(fromURLString: imageURLString)
-            }
-            .replaceError(with: Data())
-            .compactMap { $0 }
-            .assign(to: \.characterImageData, on: self)
+            .map(\.episode.count)
+            .assign(to: \.countEPISODE, on: self)
             .store(in: &cancellables)
+        
+        characterSharedPublisher
+            .map(\.id)
+            .assign(to: \.id, on: self)
+            .store(in: &cancellables)
+        
+        imageURL = character.image
+        
+        discCacheManager.imageDataSyncronizer(
+            forKey: character.image,
+            cacheAvailable: { [weak self] cachedData in
+                self?.characterImageData = cachedData
+            },
+            cacheNotAvailableHitAPI: { [weak self, apiService] in
+                guard let self = self else { return }
+                characterSharedPublisher
+                    .map(\.image)
+                    .flatMap { imageURLString -> ImageDataPublisher in
+                        guard let apiService = apiService else {
+                            return Empty().eraseToAnyPublisher()
+                        }
+                        return apiService.imageDataPublisher(fromURLString: imageURLString)
+                    }
+                    .replaceError(with: Data())
+                    .compactMap { $0 }
+                    .assign(to: \.characterImageData, on: self)
+                    .store(in: &self.cancellables)
+            }
+        )
         
         characterSharedPublisher
             .map(\.created)

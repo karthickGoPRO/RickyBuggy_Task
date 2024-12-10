@@ -17,14 +17,14 @@ struct FetchRetryView: View {
     var body: some View {
         VStack(spacing: 32) {
             VStack(spacing: 8) {
-                Text("Request Error")
+                Text(Constants.UiConstants.retryErrorTitle)
                     .font(.title3)
                     .fontWeight(.bold)
                     .lineLimit(1)
                 
                 VStack {
-                    ForEach(errors, id: \.self) { error in
-                        Text(error.localizedDescription)
+                    ForEach(errors.map { IdentifiableAPIError(error: $0) }) { identifiableError in
+                        Text(identifiableError.error.localizedDescription)
                             .font(.body)
                             .foregroundColor(.secondary)
                     }
@@ -32,7 +32,7 @@ struct FetchRetryView: View {
             }
             
             Button(action: onRetry) {
-                Text("Retry")
+                Text(Constants.UiConstants.retryTitle)
                     .font(.title3)
                     .fontWeight(.semibold)
             }
@@ -46,6 +46,9 @@ struct FetchRetryView: View {
 
 struct FetchRetryView_Previews: PreviewProvider {
     static var previews: some View {
-        FetchRetryView(errors: [.locationRequestFailed], onRetry: {})
+        FetchRetryView(
+            errors: [.locationRequestFailed(underlyingError: NSError(domain: "Preview", code: 0, userInfo: [NSLocalizedDescriptionKey: "Mock underlying error"]))],
+            onRetry: {}
+        )
     }
 }

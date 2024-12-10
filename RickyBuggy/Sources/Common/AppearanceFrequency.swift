@@ -13,27 +13,28 @@ enum AppearanceFrequency: Int {
     case low = 1
 }
 
-// FIXME: 4 - Fix issue with initialisation not working accordingly to requirements written above, try improving clean code approach
+/// FIX: 4 - Fix issue with initialisation not working accordingly to requirements written above, try improving clean code approach
 
 extension AppearanceFrequency {
     init(count: Int) {
-        if count >= 1 {
-            self = .low
-        } else if count >= 3 {
-            self = .medium
-        } else {
-            self = .high
+        switch count {
+            case 10...:
+                self = .high
+            case 3..<10:
+                self = .medium
+            default:
+                self = .low
         }
     }
     
     var popularity: String {
         switch self {
-        case .high:
-            return "So popular!"
-        case .medium:
-            return "Kind of popular"
-        case .low:
-            return "Meh"
+            case .high:
+                return Constants.UiConstants.popularityIndexHigh
+            case .medium:
+                return Constants.UiConstants.popularityIndexMedium
+            case .low:
+                return Constants.UiConstants.popularityIndexLow
         }
     }
 }

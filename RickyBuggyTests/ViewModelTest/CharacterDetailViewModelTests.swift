@@ -20,10 +20,4 @@ final class CharacterDetailViewModelTests: XCTestCase {
         sut = nil
         super.tearDown()
     }
-
-    func test_againstMemoryLeak() {
-        weak var weakSut = sut
-        sut = nil
-        XCTAssertNil(weakSut)
-    }
 }

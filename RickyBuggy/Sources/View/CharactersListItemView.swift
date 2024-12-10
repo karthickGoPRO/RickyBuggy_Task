@@ -13,37 +13,53 @@ struct CharactersListItemView: View {
     }
     
     var body: some View {
-        HStack {
-            CharacterPhoto(data: viewModel.characterImageData)
-                .aspectRatio(1, contentMode: .fill)
-                .frame(height: UIScreen.main.bounds.height / 5)
-                .cornerRadius(5)
+        ZStack {
+
+            NavigationLink(destination: CharacterDetailView(viewModel: CharacterDetailViewModel(characterId: viewModel.id, name: viewModel.title, imageURL: viewModel.imageURL))) {
+                EmptyView()
+            }
             
-            VStack(alignment: .leading) {
-                Spacer()
+            HStack {
+                CharacterPhoto(data: viewModel.characterImageData)
+                    .aspectRatio(1, contentMode: .fill)
+                    .frame(height: UIScreen.main.bounds.height / 5)
+                    .cornerRadius(5)
                 
-                HStack(alignment: .center) {
-                    Text(viewModel.title)
-                        .titleStyle()
-                                                            
+                VStack(alignment: .leading) {
+                    Spacer()
+                    
+                    HStack(alignment: .center) {
+                        Text(viewModel.title)
+                            .titleStyle()
+                        
+                        Spacer()
+                    }
+                    
+                    Spacer()
+                    
+                    //Fix - 6 Make the link tapable - DONE
+                    if let url = URL(string: viewModel.url) {
+                        Link(destination: url) {
+                            Text(viewModel.url)
+                                .font(.body)
+                                .foregroundColor(.blue)
+                                .padding(.bottom, 4)
+                        }
+                        .padding(.top, 4)
+                    }
+                    
+                    Text(viewModel.created)
+                        .contentsStyle()
+                    
+                    Spacer()
+                    
+                    Text("\(Constants.UiConstants.episodeCountTitle) \(viewModel.countEPISODE)")
+                        .contentsStyle()
                     Spacer()
                 }
-                
-                Spacer()
-
-                HStack(spacing: 16) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        // FIXME: 6 - Make URL tappable
-                        Text(viewModel.url)
-
-                        Text(viewModel.created)
-                            .contentsStyle()
-                    }
-                }
-                
-                Spacer()
             }
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

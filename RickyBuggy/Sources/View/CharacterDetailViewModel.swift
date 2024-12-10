@@ -28,10 +28,11 @@ final class CharacterDetailViewModel: ObservableObject {
     private var isLoading = false
     private var cancellables = Set<AnyCancellable>()
     
-    init(characterId: Int, name: String) {
+    init(characterId: Int, name: String, imageURL : String = "") {
         self.title = name
 
-        let apiService = DIContainer.shared.resolve(APIClient.self)
+        let apiService = SwiftInjectDI.shared.resolve(APIClient.self)
+        let discCacheManager = DiskCacheManager()
 
         showsLocationDetailsSubject
             .compactMap { $0 }
@@ -47,10 +48,15 @@ final class CharacterDetailViewModel: ObservableObject {
             .map(\.characterDetails)
 
         dataPublisher
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
-                self?.characterErrors.append(.characterDetailRequestFailed)
+                guard let self = self else { return }
+                if case let .failure(error) = completion {
+                    self.characterErrors.append(.characterDetailRequestFailed(underlyingError: error))
+                }
             }, receiveValue: { [weak self] characterDetail, location in
-                self?.data = (characterDetail, location)
+                guard let self = self else { return }
+                self.data = (characterDetail, location)
             })
             .store(in: &cancellables)
 
@@ -66,6 +72,28 @@ final class CharacterDetailViewModel: ObservableObject {
             .compactMap { $0 }
             .assign(to: \.CharacterPhotoData, on: self)
             .store(in: &cancellables)
+        
+        discCacheManager.imageDataSyncronizer(
+            forKey: imageURL,
+            cacheAvailable: { cachedData in
+                self.CharacterPhotoData = cachedData
+            },
+            cacheNotAvailableHitAPI: { [weak self] in
+                guard let self else { return }
+                characterDetailsPublisher
+                    .map(\.image)
+                    .flatMap { imageURLString -> ImageDataPublisher in
+                        guard let apiService = apiService else {
+                            return Empty().eraseToAnyPublisher()
+                        }
+                        return apiService.imageDataPublisher(fromURLString: imageURLString)
+                    }
+                    .replaceError(with: Data())
+                    .compactMap { $0 }
+                    .assign(to: \.CharacterPhotoData, on: self)
+                    .store(in: &self.cancellables)
+            }
+        )
 
         characterDetailsPublisher
             .map(\.name)
@@ -106,24 +134,28 @@ final class CharacterDetailViewModel: ObservableObject {
         data = nil
         characterErrors.removeAll()
         isLoading = true
-
-        if let apiService = DIContainer.shared.resolve(APIClient.self), let characterID = characterIDSubject.value {
-            Publishers.Zip(apiService.characterDetailPublisher(with: String(characterID)),
-                           // FIXME: 11 - FIX so location is fetched based on character location id
-                           apiService.locationPublisher(with: "2"))
-                .sink(receiveCompletion: { [weak self] completion in
-                    switch completion {
+        
+        if let apiService = SwiftInjectDI.shared.resolve(APIClient.self),
+           let characterID = characterIDSubject.value {
+            Publishers.Zip(
+                apiService.characterDetailPublisher(with: String(characterID)),
+                apiService.locationPublisher(with: "\(characterID)")
+            )
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                switch completion {
                     case let .failure(error):
-                        self?.characterErrors.append(error)
+                        self.characterErrors.append(error)
                     case .finished:
                         break
-                    }
-
-                    self?.isLoading = false
-                }, receiveValue: { [weak self] characterDetail, comments in
-                    self?.dataSubject.send((characterDetail, comments))
-                })
-                .store(in: &cancellables)
+                }
+                self.isLoading = false
+            }, receiveValue: { [weak self] characterDetail, comments in
+                guard let self = self else { return }
+                self.dataSubject.send((characterDetail, comments))
+            })
+            .store(in: &cancellables)
         }
     }
 }

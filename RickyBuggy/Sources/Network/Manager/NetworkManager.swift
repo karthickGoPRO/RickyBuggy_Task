@@ -8,21 +8,28 @@ import Combine
 
 final class NetworkManager: NetworkManagerProtocol {
     
-    static let RANDOM_HOST_NAME_TO_FAIL_REQUEST = "thisshouldfail.com"
-    
-    // FIXME: 2 - Refactor - add support for different properties eg. POST, httpBody, different timeouts etc.
-    func publisher(path: String) -> Publishers.MapKeyPath<Publishers.MapError<URLSession.DataTaskPublisher, Error>, Data> {
+    /// FIX: 2 - Refactor - add support for different properties eg. POST, httpBody, different timeouts etc. -- DONE
+    func publisher(path: String,
+                   httpMethod: String,
+                   httpBody: Data?,
+                   timeoutInterval timeout: TimeInterval) -> Publishers.MapKeyPath<Publishers.MapError<URLSession.DataTaskPublisher, Error>, Data> {
         var components = URLComponents()
-        components.scheme = "http"
-        // This is intended, if you decide to move this code around please keep functionality to random fail request
-        components.host = Int.random(in: 1...10) > 3 ? "rickandmortyapi.com" : NetworkManager.RANDOM_HOST_NAME_TO_FAIL_REQUEST
+        components.scheme = Constants.NetworkConstants.scheme
+        components.host = Int.random(in: 1...10) > 3 ? Constants.NetworkConstants.baseURL : Constants.NetworkConstants.failCaseURL
         components.path = path
         
-        // FIXME: 3 - Add "guard let url = components.url else..."
+        /// FIX: 3 - Add "guard let url = components.url else..." -- DONE
+        /// Have not changed the return type in protocol so added dummy empty value for else
+        guard components.path != "" else {
+            return URLSession.shared.dataTaskPublisher(for: URLRequest(url: URL(string: Constants.NetworkConstants.failCaseURL)!))
+                .mapError { _ in APIError.imageDataRequestFailed(underlyingError: URLError(.badURL)) }
+                .map(\.data)
+        }
         
-        var request = URLRequest(url: components.url!, timeoutInterval: 5)
-        request.httpMethod = "GET"
-
+        var request = URLRequest(url: components.url!, timeoutInterval: timeout)
+        request.httpMethod = httpMethod
+        request.httpBody = httpBody
+        
         return URLSession.shared.dataTaskPublisher(for: request)
             .mapError { $0 as Error }
             .map(\.data)
