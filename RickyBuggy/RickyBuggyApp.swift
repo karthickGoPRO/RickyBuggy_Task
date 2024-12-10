@@ -11,9 +11,14 @@ struct RickyBuggyApp: App {
     @State var isListHidden = true
     
     init() {
-        DIContainer.shared.register(NetworkManager())
-        DIContainer.shared.register(APIClient())
-        DIContainer.shared.register(DiskCacheManager())
+        //MANAGED BY SWInject
+        SwiftInjectDI.shared.register(NetworkManager.self) { _ in
+            NetworkManager()
+        }
+        
+        SwiftInjectDI.shared.register(APIClient.self) { _ in
+            APIClient()
+        }
     }
     
     var body: some Scene {

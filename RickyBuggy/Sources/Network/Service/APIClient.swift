@@ -10,7 +10,7 @@ final class APIClient: APIProtocol {
     private let networkManager: NetworkManagerProtocol?
     
     init() {
-        self.networkManager = DIContainer.shared.resolve(NetworkManager.self)
+        networkManager = SwiftInjectDI.shared.resolve(NetworkManager.self)
     }
     
     func imageDataPublisher(fromURLString urlString: String) -> ImageDataPublisher {
@@ -23,8 +23,8 @@ final class APIClient: APIProtocol {
                     .handleEvents(receiveOutput: { [weak self] receivedData in
                     guard let _ = self else { return }
                     do {
-                        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
-                        try discCacheManager?.storeImageData(receivedData, forKey: urlString)
+                        let discCacheManager = DiskCacheManager()
+                        try discCacheManager.storeImageData(receivedData, forKey: urlString)
                     } catch {
                         print("Failed to store image data: \(error)")
                     }

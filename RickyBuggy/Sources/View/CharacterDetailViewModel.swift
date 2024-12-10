@@ -31,8 +31,8 @@ final class CharacterDetailViewModel: ObservableObject {
     init(characterId: Int, name: String, imageURL : String = "") {
         self.title = name
 
-        let apiService = DIContainer.shared.resolve(APIClient.self)
-        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
+        let apiService = SwiftInjectDI.shared.resolve(APIClient.self)
+        let discCacheManager = DiskCacheManager()
 
         showsLocationDetailsSubject
             .compactMap { $0 }
@@ -73,7 +73,7 @@ final class CharacterDetailViewModel: ObservableObject {
             .assign(to: \.CharacterPhotoData, on: self)
             .store(in: &cancellables)
         
-        discCacheManager?.imageDataSyncronizer(
+        discCacheManager.imageDataSyncronizer(
             forKey: imageURL,
             cacheAvailable: { cachedData in
                 self.CharacterPhotoData = cachedData
@@ -135,7 +135,7 @@ final class CharacterDetailViewModel: ObservableObject {
         characterErrors.removeAll()
         isLoading = true
         
-        if let apiService = DIContainer.shared.resolve(APIClient.self),
+        if let apiService = SwiftInjectDI.shared.resolve(APIClient.self),
            let characterID = characterIDSubject.value {
             Publishers.Zip(
                 apiService.characterDetailPublisher(with: String(characterID)),

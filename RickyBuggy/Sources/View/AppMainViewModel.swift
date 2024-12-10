@@ -23,7 +23,7 @@ final class AppMainViewModel: ObservableObject {
     private let diskCacheManager: DiskCacheManager?
     
     init() {
-        diskCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
+        diskCacheManager = DiskCacheManager()
         bindSortMethod()
         showsSortActionSheetSubject
             .compactMap { $0 }
@@ -56,7 +56,7 @@ final class AppMainViewModel: ObservableObject {
 
         isLoading = true
 
-        let apiService = DIContainer.shared.resolve(APIClient.self)
+        let apiService = SwiftInjectDI.shared.resolve(APIClient.self)
         
         apiService?.charactersPublisher()
             .receive(on: DispatchQueue.main)

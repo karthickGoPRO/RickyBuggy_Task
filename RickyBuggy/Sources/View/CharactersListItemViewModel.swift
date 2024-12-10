@@ -23,8 +23,8 @@ final class CharactersListItemViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init(character: CharacterResponseModel) {
-        let discCacheManager = DIContainer.shared.resolve(DiskCacheManager.self)
-        let apiService = DIContainer.shared.resolve(APIClient.self)
+        let discCacheManager = DiskCacheManager()
+        let apiService = SwiftInjectDI.shared.resolve(APIClient.self)
         let characterSharedPublisher = characterSubject
             .compactMap { $0 }
             .share()
@@ -46,7 +46,7 @@ final class CharactersListItemViewModel: ObservableObject {
         
         imageURL = character.image
         
-        discCacheManager?.imageDataSyncronizer(
+        discCacheManager.imageDataSyncronizer(
             forKey: character.image,
             cacheAvailable: { cachedData in
                 self.characterImageData = cachedData

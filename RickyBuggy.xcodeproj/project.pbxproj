@@ -11,6 +11,9 @@
 		28C5A5B72D07177E008A5C85 /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2308FF282A41B1003EC7DC /* CharactersListView.swift */; };
 		28C5A5B92D072314008A5C85 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C5A5B82D072314008A5C85 /* Constants.swift */; };
 		28C5A5BC2D079BEE008A5C85 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C5A5BB2D079BEE008A5C85 /* ImageCacheManager.swift */; };
+		28C5A5BF2D082838008A5C85 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 28C5A5BE2D082838008A5C85 /* Swinject */; };
+		28C5A5C32D082925008A5C85 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 28C5A5C22D082925008A5C85 /* Swinject */; };
+		28C5A5C72D082B21008A5C85 /* SwiftInjectDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C5A5C62D082B0D008A5C85 /* SwiftInjectDI.swift */; };
 		2C2308BF282A3FD8003EC7DC /* RickyBuggyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2308BE282A3FD8003EC7DC /* RickyBuggyApp.swift */; };
 		2C2308C3282A3FD9003EC7DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2308C2282A3FD9003EC7DC /* Assets.xcassets */; };
 		2C2308C6282A3FD9003EC7DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2308C5282A3FD9003EC7DC /* Preview Assets.xcassets */; };
@@ -50,6 +53,7 @@
 		28C5A5B82D072314008A5C85 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		28C5A5BA2D072A3E008A5C85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		28C5A5BB2D079BEE008A5C85 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
+		28C5A5C62D082B0D008A5C85 /* SwiftInjectDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftInjectDI.swift; sourceTree = "<group>"; };
 		2C2308BB282A3FD8003EC7DC /* RickyBuggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickyBuggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C2308BE282A3FD8003EC7DC /* RickyBuggyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RickyBuggyApp.swift; sourceTree = "<group>"; };
 		2C2308C2282A3FD9003EC7DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28C5A5BF2D082838008A5C85 /* Swinject in Frameworks */,
+				28C5A5C32D082925008A5C85 /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +192,7 @@
 		2C2308F7282A41B1003EC7DC /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				28C5A5C62D082B0D008A5C85 /* SwiftInjectDI.swift */,
 				2C2308F8282A41B1003EC7DC /* AppearanceFrequency.swift */,
 				2C2308F9282A41B1003EC7DC /* SortMethod.swift */,
 				2C2308FA282A41B1003EC7DC /* DIContainer.swift */,
@@ -304,6 +311,9 @@
 				Base,
 			);
 			mainGroup = 2C2308B2282A3FD8003EC7DC;
+			packageReferences = (
+				28C5A5BD2D082837008A5C85 /* XCRemoteSwiftPackageReference "Swinject" */,
+			);
 			productRefGroup = 2C2308BC282A3FD8003EC7DC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -371,6 +381,7 @@
 				2C2308BF282A3FD8003EC7DC /* RickyBuggyApp.swift in Sources */,
 				2C23091D282A41B1003EC7DC /* CharactersListItemViewModel.swift in Sources */,
 				2C230913282A41B1003EC7DC /* LocationDetailsResponseModel.swift in Sources */,
+				28C5A5C72D082B21008A5C85 /* SwiftInjectDI.swift in Sources */,
 				28C5A5B72D07177E008A5C85 /* CharactersListView.swift in Sources */,
 				2C230911282A41B1003EC7DC /* SortMethod.swift in Sources */,
 				28C5A5B62D0716E5008A5C85 /* DIContainer.swift in Sources */,
@@ -654,6 +665,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		28C5A5BD2D082837008A5C85 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		28C5A5BE2D082838008A5C85 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28C5A5BD2D082837008A5C85 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		28C5A5C22D082925008A5C85 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 28C5A5BD2D082837008A5C85 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2C2308B3282A3FD8003EC7DC /* Project object */;
 }
