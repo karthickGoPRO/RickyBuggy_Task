@@ -12,7 +12,7 @@ final class AppMainViewModel: ObservableObject {
     @Published var sortMethod: SortMethod = .name
     @Published var characters: [CharacterResponseModel] = []
 
-    @Published private(set) var characterErrors: [APIError] = []
+    @Published var characterErrors: [APIError] = []
     @Published private(set) var sortMethodDescription: String = Constants.UiConstants.sortingOptionTitle
 
     private let showsSortActionSheetSubject = CurrentValueSubject<Bool?, Never>(nil)

@@ -48,11 +48,11 @@ final class CharactersListItemViewModel: ObservableObject {
         
         discCacheManager.imageDataSyncronizer(
             forKey: character.image,
-            cacheAvailable: { cachedData in
-                self.characterImageData = cachedData
+            cacheAvailable: { [weak self] cachedData in
+                self?.characterImageData = cachedData
             },
-            cacheNotAvailableHitAPI: { [weak self] in
-                guard let self else { return }
+            cacheNotAvailableHitAPI: { [weak self, apiService] in
+                guard let self = self else { return }
                 characterSharedPublisher
                     .map(\.image)
                     .flatMap { imageURLString -> ImageDataPublisher in

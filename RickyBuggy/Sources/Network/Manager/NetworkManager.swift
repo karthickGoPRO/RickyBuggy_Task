@@ -20,13 +20,13 @@ final class NetworkManager: NetworkManagerProtocol {
         
         /// FIX: 3 - Add "guard let url = components.url else..." -- DONE
         /// Have not changed the return type in protocol so added dummy empty value for else
-        guard let url = components.url else {
+        guard components.path != "" else {
             return URLSession.shared.dataTaskPublisher(for: URLRequest(url: URL(string: Constants.NetworkConstants.failCaseURL)!))
                 .mapError { _ in APIError.imageDataRequestFailed(underlyingError: URLError(.badURL)) }
                 .map(\.data)
         }
         
-        var request = URLRequest(url: url, timeoutInterval: timeout)
+        var request = URLRequest(url: components.url!, timeoutInterval: timeout)
         request.httpMethod = httpMethod
         request.httpBody = httpBody
         
